@@ -1,0 +1,529 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 45;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		A59510B60FE9873400692D58 /* TestEchoNest */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = A59510C60FE9878000692D58 /* Build configuration list for PBXAggregateTarget "TestEchoNest" */;
+			buildPhases = (
+			);
+			dependencies = (
+				A59510C00FE9877200692D58 /* PBXTargetDependency */,
+				A59510BE0FE9876000692D58 /* PBXTargetDependency */,
+			);
+			name = TestEchoNest;
+			productName = TestEchoNest;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		A501627A0FE98F6E0031B661 /* EchoNest.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A5862E560FE981C900BF413C /* EchoNest.framework */; };
+		A50162820FE98F9B0031B661 /* EchoNest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5862E560FE981C900BF413C /* EchoNest.framework */; };
+		A50162980FE990120031B661 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A525F4270FFA0C760083AFA6 /* EchoNest.xib in Resources */ = {isa = PBXBuildFile; fileRef = A525F4250FFA0C760083AFA6 /* EchoNest.xib */; };
+		A525F43C0FFA0D010083AFA6 /* EchoNestTestClass.m in Sources */ = {isa = PBXBuildFile; fileRef = A525F4390FFA0D010083AFA6 /* EchoNestTestClass.m */; };
+		A525F43D0FFA0D010083AFA6 /* MyView.m in Sources */ = {isa = PBXBuildFile; fileRef = A525F43B0FFA0D010083AFA6 /* MyView.m */; };
+		A525F4560FFA0DFC0083AFA6 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A525F4550FFA0DFC0083AFA6 /* main.m */; };
+		A5862E660FE981EC00BF413C /* EchoNest.h in Headers */ = {isa = PBXBuildFile; fileRef = A5862E5C0FE981EC00BF413C /* EchoNest.h */; };
+		A5862E670FE981EC00BF413C /* EchoNest.m in Sources */ = {isa = PBXBuildFile; fileRef = A5862E5D0FE981EC00BF413C /* EchoNest.m */; };
+		A5862E680FE981EC00BF413C /* ENArtist.h in Headers */ = {isa = PBXBuildFile; fileRef = A5862E5E0FE981EC00BF413C /* ENArtist.h */; };
+		A5862E690FE981EC00BF413C /* ENArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = A5862E5F0FE981EC00BF413C /* ENArtist.m */; };
+		A5862E6C0FE981EC00BF413C /* ENTrack.h in Headers */ = {isa = PBXBuildFile; fileRef = A5862E620FE981EC00BF413C /* ENTrack.h */; };
+		A5862E6D0FE981EC00BF413C /* ENTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A5862E630FE981EC00BF413C /* ENTrack.m */; };
+		A59CEAB80FEEA82E008C17D2 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A59CEAB70FEEA82E008C17D2 /* QTKit.framework */; };
+		A5AA4FA70FF13787004E525F /* libcrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = A5AA4FA60FF13787004E525F /* libcrypto.dylib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		A501627C0FE98F850031B661 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5862E550FE981C900BF413C;
+			remoteInfo = EchoNest;
+		};
+		A59510BD0FE9876000692D58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A595106B0FE9848C00692D58;
+			remoteInfo = EchoNestApp;
+		};
+		A59510BF0FE9877200692D58 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = A5862E550FE981C900BF413C;
+			remoteInfo = EchoNest;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A50162A10FE990160031B661 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				A501627A0FE98F6E0031B661 /* EchoNest.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
+		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		A525F4250FFA0C760083AFA6 /* EchoNest.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = EchoNest.xib; path = Resources/EchoNest.xib; sourceTree = "<group>"; };
+		A525F4260FFA0C760083AFA6 /* EchoNestApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.mxml; name = "EchoNestApp-Info.plist"; path = "Resources/EchoNestApp-Info.plist"; sourceTree = "<group>"; };
+		A525F4370FFA0D010083AFA6 /* EchoNest_prefix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EchoNest_prefix.h; sourceTree = "<group>"; };
+		A525F4380FFA0D010083AFA6 /* EchoNestTestClass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EchoNestTestClass.h; sourceTree = "<group>"; };
+		A525F4390FFA0D010083AFA6 /* EchoNestTestClass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EchoNestTestClass.m; sourceTree = "<group>"; };
+		A525F43A0FFA0D010083AFA6 /* MyView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyView.h; sourceTree = "<group>"; };
+		A525F43B0FFA0D010083AFA6 /* MyView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyView.m; sourceTree = "<group>"; };
+		A525F4550FFA0DFC0083AFA6 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		A525F4570FFA0E140083AFA6 /* EchoNest-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.mxml; name = "EchoNest-Info.plist"; path = "Resources/EchoNest-Info.plist"; sourceTree = "<group>"; };
+		A5862E560FE981C900BF413C /* EchoNest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = EchoNest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5862E5C0FE981EC00BF413C /* EchoNest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EchoNest.h; sourceTree = "<group>"; };
+		A5862E5D0FE981EC00BF413C /* EchoNest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EchoNest.m; sourceTree = "<group>"; };
+		A5862E5E0FE981EC00BF413C /* ENArtist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENArtist.h; sourceTree = "<group>"; };
+		A5862E5F0FE981EC00BF413C /* ENArtist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ENArtist.m; sourceTree = "<group>"; };
+		A5862E620FE981EC00BF413C /* ENTrack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ENTrack.h; sourceTree = "<group>"; };
+		A5862E630FE981EC00BF413C /* ENTrack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ENTrack.m; sourceTree = "<group>"; };
+		A595106C0FE9848C00692D58 /* EchoNestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoNestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A59CEAB70FEEA82E008C17D2 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
+		A59FD31F0FE7CF240083CFC4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
+		A5AA4FA60FF13787004E525F /* libcrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcrypto.dylib; path = /usr/lib/libcrypto.dylib; sourceTree = "<absolute>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A5862E540FE981C900BF413C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5AA4FA70FF13787004E525F /* libcrypto.dylib in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A595106A0FE9848C00692D58 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A50162980FE990120031B661 /* Cocoa.framework in Frameworks */,
+				A50162820FE98F9B0031B661 /* EchoNest.framework in Frameworks */,
+				A59CEAB80FEEA82E008C17D2 /* QTKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		080E96DDFE201D6D7F000001 /* classes */ = {
+			isa = PBXGroup;
+			children = (
+				A525F4550FFA0DFC0083AFA6 /* main.m */,
+				A525F4370FFA0D010083AFA6 /* EchoNest_prefix.h */,
+				A525F4380FFA0D010083AFA6 /* EchoNestTestClass.h */,
+				A525F4390FFA0D010083AFA6 /* EchoNestTestClass.m */,
+				A525F43A0FFA0D010083AFA6 /* MyView.h */,
+				A525F43B0FFA0D010083AFA6 /* MyView.m */,
+			);
+			path = classes;
+			sourceTree = "<group>";
+		};
+		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A5AA4FA60FF13787004E525F /* libcrypto.dylib */,
+				A59CEAB70FEEA82E008C17D2 /* QTKit.framework */,
+				A59FD31F0FE7CF240083CFC4 /* QuartzCore.framework */,
+				1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */,
+			);
+			name = "Linked Frameworks";
+			sourceTree = "<group>";
+		};
+		1058C7A2FEA54F0111CA2CBB /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				29B97324FDCFA39411CA2CEA /* AppKit.framework */,
+				13E42FB307B3F0F600E4EEF1 /* CoreData.framework */,
+				29B97325FDCFA39411CA2CEA /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		19C28FACFE9D520D11CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A5862E560FE981C900BF413C /* EchoNest.framework */,
+				A595106C0FE9848C00692D58 /* EchoNestApp.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		29B97314FDCFA39411CA2CEA /* soundscapes 3D */ = {
+			isa = PBXGroup;
+			children = (
+				A5862E5B0FE981EC00BF413C /* EchoNest */,
+				080E96DDFE201D6D7F000001 /* classes */,
+				29B97317FDCFA39411CA2CEA /* Resources */,
+				29B97323FDCFA39411CA2CEA /* Frameworks */,
+				19C28FACFE9D520D11CA2CBB /* Products */,
+			);
+			name = "soundscapes 3D";
+			sourceTree = "<group>";
+		};
+		29B97317FDCFA39411CA2CEA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A525F4570FFA0E140083AFA6 /* EchoNest-Info.plist */,
+				A525F4250FFA0C760083AFA6 /* EchoNest.xib */,
+				A525F4260FFA0C760083AFA6 /* EchoNestApp-Info.plist */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
+				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A5862E5B0FE981EC00BF413C /* EchoNest */ = {
+			isa = PBXGroup;
+			children = (
+				A5862E5C0FE981EC00BF413C /* EchoNest.h */,
+				A5862E5D0FE981EC00BF413C /* EchoNest.m */,
+				A5862E5E0FE981EC00BF413C /* ENArtist.h */,
+				A5862E5F0FE981EC00BF413C /* ENArtist.m */,
+				A5862E620FE981EC00BF413C /* ENTrack.h */,
+				A5862E630FE981EC00BF413C /* ENTrack.m */,
+			);
+			name = EchoNest;
+			path = classes/EchoNest;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		A5862E510FE981C900BF413C /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5862E660FE981EC00BF413C /* EchoNest.h in Headers */,
+				A5862E680FE981EC00BF413C /* ENArtist.h in Headers */,
+				A5862E6C0FE981EC00BF413C /* ENTrack.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		A5862E550FE981C900BF413C /* EchoNest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A5862E5A0FE981CB00BF413C /* Build configuration list for PBXNativeTarget "EchoNest" */;
+			buildPhases = (
+				A5862E510FE981C900BF413C /* Headers */,
+				A5862E520FE981C900BF413C /* Resources */,
+				A5862E530FE981C900BF413C /* Sources */,
+				A5862E540FE981C900BF413C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EchoNest;
+			productName = EchoNest;
+			productReference = A5862E560FE981C900BF413C /* EchoNest.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		A595106B0FE9848C00692D58 /* EchoNestApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A59510710FE9848E00692D58 /* Build configuration list for PBXNativeTarget "EchoNestApp" */;
+			buildPhases = (
+				A59510680FE9848C00692D58 /* Resources */,
+				A59510690FE9848C00692D58 /* Sources */,
+				A595106A0FE9848C00692D58 /* Frameworks */,
+				A50162A10FE990160031B661 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				A501627D0FE98F850031B661 /* PBXTargetDependency */,
+			);
+			name = EchoNestApp;
+			productName = EchoNestApp;
+			productReference = A595106C0FE9848C00692D58 /* EchoNestApp.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		29B97313FDCFA39411CA2CEA /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EchoNest Framework" */;
+			compatibilityVersion = "Xcode 3.1";
+			hasScannedForEncodings = 1;
+			mainGroup = 29B97314FDCFA39411CA2CEA /* soundscapes 3D */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A59510B60FE9873400692D58 /* TestEchoNest */,
+				A595106B0FE9848C00692D58 /* EchoNestApp */,
+				A5862E550FE981C900BF413C /* EchoNest */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A5862E520FE981C900BF413C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A59510680FE9848C00692D58 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A525F4270FFA0C760083AFA6 /* EchoNest.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A5862E530FE981C900BF413C /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A5862E670FE981EC00BF413C /* EchoNest.m in Sources */,
+				A5862E690FE981EC00BF413C /* ENArtist.m in Sources */,
+				A5862E6D0FE981EC00BF413C /* ENTrack.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		A59510690FE9848C00692D58 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A525F43C0FFA0D010083AFA6 /* EchoNestTestClass.m in Sources */,
+				A525F43D0FFA0D010083AFA6 /* MyView.m in Sources */,
+				A525F4560FFA0DFC0083AFA6 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A501627D0FE98F850031B661 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5862E550FE981C900BF413C /* EchoNest */;
+			targetProxy = A501627C0FE98F850031B661 /* PBXContainerItemProxy */;
+		};
+		A59510BE0FE9876000692D58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A595106B0FE9848C00692D58 /* EchoNestApp */;
+			targetProxy = A59510BD0FE9876000692D58 /* PBXContainerItemProxy */;
+		};
+		A59510C00FE9877200692D58 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = A5862E550FE981C900BF413C /* EchoNest */;
+			targetProxy = A59510BF0FE9877200692D58 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		A5862E580FE981CA00BF413C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Resources/EchoNest-Info.plist";
+				INSTALL_PATH = "@executable_path/../Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = EchoNest;
+			};
+			name = Debug;
+		};
+		A5862E590FE981CA00BF413C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				FRAMEWORK_VERSION = A;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = "Resources/EchoNest-Info.plist";
+				INSTALL_PATH = "$(HOME)/Library/Frameworks";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = EchoNest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A595106F0FE9848D00692D58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = classes/EchoNest_prefix.h;
+				INFOPLIST_FILE = "Resources/EchoNestApp-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = "-ObjC";
+				PREBINDING = NO;
+				PRODUCT_NAME = EchoNestApp;
+			};
+			name = Debug;
+		};
+		A59510700FE9848D00692D58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = classes/EchoNest_prefix.h;
+				INFOPLIST_FILE = "EchoNestApp-Info.plist";
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = "-ObjC";
+				PREBINDING = NO;
+				PRODUCT_NAME = EchoNestApp;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		A59510B70FE9873400692D58 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				PRODUCT_NAME = TestEchoNest;
+			};
+			name = Debug;
+		};
+		A59510B80FE9873400692D58 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				PRODUCT_NAME = TestEchoNest;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		C01FCF4F08A954540054247B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Debug;
+		};
+		C01FCF5008A954540054247B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				GCC_C_LANGUAGE_STANDARD = c99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				PREBINDING = NO;
+				SDKROOT = macosx10.5;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A5862E5A0FE981CB00BF413C /* Build configuration list for PBXNativeTarget "EchoNest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5862E580FE981CA00BF413C /* Debug */,
+				A5862E590FE981CA00BF413C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A59510710FE9848E00692D58 /* Build configuration list for PBXNativeTarget "EchoNestApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A595106F0FE9848D00692D58 /* Debug */,
+				A59510700FE9848D00692D58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		A59510C60FE9878000692D58 /* Build configuration list for PBXAggregateTarget "TestEchoNest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A59510B70FE9873400692D58 /* Debug */,
+				A59510B80FE9873400692D58 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "EchoNest Framework" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C01FCF4F08A954540054247B /* Debug */,
+				C01FCF5008A954540054247B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 29B97313FDCFA39411CA2CEA /* Project object */;
+}
