@@ -49,6 +49,8 @@
 -(id) initWithAPIKey:(NSString*)APIKey andArtistID:(NSString*)artistID andTrackMD5:(NSString*)trackMd5 {
 	self = [super init];
 	if (self != nil) {
+		xmlParser = [[NSXMLParser alloc] init];
+		[xmlParser setDelegate:self];
 		[self setApiKey:APIKey];
 		[self setArtistId:artistID];
 		[self setTrackMD5:trackMd5];
@@ -77,7 +79,6 @@
 	return [self initWithAPIKey:nil];
 }
 
-
 -(void) validateApiKey {
 	NSLog(@"VALIDATING API KEY");
 	apiKeyValidationData = [[NSMutableData alloc] init];
@@ -85,7 +86,6 @@
 	[req setURL:url];
 	apiKeyValidationConnection = [NSURLConnection connectionWithRequest:req delegate:self];
 }
-
 -(void) searchArtistWithString:(NSString*)input {
 	if ([self apiKeyIsValid]) {
 		NSLog(@"SEARCHING ARTIST : %@",[self urlencode:input]);
@@ -114,19 +114,10 @@
 -(void) uploadFile:(NSString*)path {
 	[self setFilePath:path];
 	trackUploadData = [NSData dataWithContentsOfFile:path];
-	unsigned char* digest = MD5([trackUploadData bytes], [trackUploadData length], NULL);
-	NSString* s = [NSString stringWithFormat: @"%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-						digest[0], digest[1], 
-						digest[2], digest[3],
-						digest[4], digest[5],
-						digest[6], digest[7],
-						digest[8], digest[9],
-						digest[10], digest[11],
-						digest[12], digest[13],
-						digest[14], digest[15]];
-	[self setTrackMD5:s];
+	NSString* hash = [self md5:trackUploadData];
+	[self setTrackMD5:hash];
 	trackUploadValidationData = [[NSMutableData alloc] init];
-	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@get_key?api_key=%@&md5=%@&version=3",[self baseUrl],[self apiKey],s]];
+	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@get_key?api_key=%@&md5=%@&version=3",[self baseUrl],[self apiKey],hash]];
 	[req setURL:url];
 	trackUploadValidationConnection = [NSURLConnection connectionWithRequest:req delegate:self];
 }
@@ -182,7 +173,6 @@
 	}
 }
 - (void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	//NSLog(@"URL DATA%@",data);
 	if ([connection isEqual:apiKeyValidationConnection]) {
 		[apiKeyValidationData appendData:data];
 	}
@@ -197,56 +187,73 @@
 	}
 }
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection {
-	NSNotification* not;
-	NSNumber* success;
 	if ([connection isEqual:apiKeyValidationConnection]) {
-		NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:apiKeyValidationData options:NSXMLDocumentTidyXML error:nil];
-		NSArray* valid = [xml objectsForXQuery:@"for $p in .//response/status/message\nwhere $p/text()=\"Invalid API key\"return $p" error:nil];
-		if ([valid count] == 1) {
-			[self setApiKeyIsValid:NO];
-			success = [NSNumber numberWithBool:NO];
-		} else {
-			[self setApiKeyIsValid:YES];
-			success = [NSNumber numberWithBool:YES];
-		}
-		not = [NSNotification notificationWithName:@"ENApiKeyIsValid" object:success];
+		notificationName = [NSString stringWithString:@"ENApiKeyIsValid"];
+		[xmlParser initWithData:apiKeyValidationData];
+		[xmlParser parse];
 	}
 	if ([connection isEqual:artistSearchConnection]) {
-		NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:artistSearchData options:NSXMLDocumentTidyXML error:nil];
-		NSArray* ids = [xml objectsForXQuery:@"for $p in .//response/artists/artist/id/text()\nreturn $p" error:nil];
-		NSArray* names = [xml objectsForXQuery:@"for $p in .//response/artists/artist/name/text()\nreturn $p" error:nil];
-		NSDictionary* xmlValues = [NSDictionary dictionaryWithObjects:ids forKeys:names];
-		if ([names count] >= 1) {
-			success = [NSNumber numberWithBool:YES];
-		} else {
-			success = [NSNumber numberWithBool:NO];
-		}
-		not = [NSNotification notificationWithName:@"ENArtistSearchFinished" object:success userInfo:xmlValues];
+		notificationName = [NSString stringWithString:@"ENArtistSearchFinished"];
+		[xmlParser initWithData:artistSearchData];
+		[xmlParser parse];
 	}
 	if ([connection isEqual:trackUploadValidationConnection]) {
-		NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:trackUploadValidationData options:NSXMLDocumentTidyXML error:nil];
-		NSArray* valid = [xml objectsForXQuery:@"for $p in .//response/status/message\nwhere $p/text()=\"Success\"return $p" error:nil];
-		if ([valid count] == 1) {
-			success = [NSNumber numberWithBool:YES];
-			[self initializeTrack];
-		} else {
-			success = [NSNumber numberWithBool:NO];
-			[self uploadData];
-		}
-		not = [NSNotification notificationWithName:@"ENUploadValidationFinished" object:success];
+		notificationName = [NSString stringWithString:@"ENUploadValidationFinished"];
+		[xmlParser initWithData:trackUploadValidationData];
+		[xmlParser parse];
 	}
 	if ([connection isEqual:trackUploadConnection]) {
-		NSXMLDocument* xml = [[NSXMLDocument alloc] initWithData:trackUploadResponseData options:NSXMLDocumentTidyXML error:nil];
-		NSArray* valid = [xml objectsForXQuery:@"for $p in .//response/status/message\nwhere $p/text()=\"Success\"return $p" error:nil];
-		if ([valid count] == 1) {
-			success = [NSNumber numberWithBool:YES];
-			[self initializeTrack];
-		} else {
-			success = [NSNumber numberWithBool:NO];
+		notificationName = [NSString stringWithString:@"ENTrackUploadFinished"];
+		[xmlParser initWithData:trackUploadResponseData];
+		[xmlParser parse];
+	}	
+}
+
+- (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
+	currentStringValue =[[NSMutableString alloc] init];	
+}
+
+- (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {	
+	[currentStringValue appendString:string];
+}
+
+- (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
+	if ([elementName isEqual:@"message"]) {
+		NSNumber* success;		
+		if ([notificationName isEqual:@"ENApiKeyIsValid"]) {
+			if ([currentStringValue isEqualToString:@"Invalid API key"]) {
+				success = [NSNumber numberWithBool:NO];				
+			} else {
+				success = [NSNumber numberWithBool:YES];
+			}
 		}
-		not = [NSNotification notificationWithName:@"ENTrackUploadFinished" object:success];
+		if ([notificationName isEqual:@"ENUploadValidationFinished"]) {
+			if ([currentStringValue isEqual:@"Success"]) {
+				success = [NSNumber numberWithBool:YES];
+				[self initializeTrack];
+			} else {
+				success = [NSNumber numberWithBool:NO];
+				[self uploadData];
+			}
+		}
+		if ([notificationName isEqual:@"ENTrackUploadFinished"]) {
+			if ([currentStringValue isEqual:@"Success"]) {
+				success = [NSNumber numberWithBool:YES];
+				[self initializeTrack];
+			} else {
+				success = [NSNumber numberWithBool:NO];
+			}
+		}
+		NSNotification* not = [NSNotification notificationWithName:notificationName object:success];
+		[[NSNotificationCenter defaultCenter] postNotification:not];
 	}
-	[[NSNotificationCenter defaultCenter] postNotification:not];
+	
+	[currentStringValue release];
+	currentStringValue = nil;
+}
+
+- (void)parserDidEndDocument:(NSXMLParser *)parser {
+	
 }
 
 -(ENTrack*)track{	return track; }
@@ -299,5 +306,15 @@
 	
 	return out;
 }
+
+-(NSString*) md5:(NSData*)data {		
+	unsigned char result[CC_MD5_DIGEST_LENGTH];
+	CC_MD5( [trackUploadData bytes], [trackUploadData length], result );
+	return [[NSString stringWithFormat:
+			  @"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
+			  result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7],
+			  result[8], result[9], result[10], result[11], result[12], result[13], result[14], result[15]
+	] lowercaseString];
+} 
 
 @end

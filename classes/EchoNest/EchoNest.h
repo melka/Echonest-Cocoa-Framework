@@ -5,12 +5,10 @@
 //  Created by Kamel Makhloufi on 17/06/09.
 //  Copyright 2009 melka. All rights reserved.
 //
-
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
 #import "ENArtist.h"
 #import "ENTrack.h"
-#include <openssl/md5.h>
-
+#include <CommonCrypto/CommonDigest.h>
 /**
  Base Class for dealing with the Echonest API
  */
@@ -47,6 +45,11 @@
 	NSMutableData*		trackUploadResponseData;
 	NSURLConnection*	trackUploadValidationConnection;
 	NSMutableData*		trackUploadValidationData;
+	
+	// TEMP DATAS
+	NSXMLParser*		xmlParser;
+	NSMutableString*	currentStringValue;
+	NSString*			notificationName;
 
 	// VERIFICATION
 	BOOL apiKeyIsValid;
@@ -81,5 +84,6 @@
 -(ENTrack*)track;
 
 -(NSString *) urlencode: (NSString *) url;
+-(NSString*) md5:(NSData*)data;
 
 @end

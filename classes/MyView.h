@@ -1,13 +1,14 @@
 #import <Cocoa/Cocoa.h>
 #import <QTKit/QTKit.h>
+#import "EchoNest/EchoNest.h"
 
 @interface MyView : NSView {
 	NSArray* sectionsData;
 	NSArray* barsData;
 	NSArray* beatsData;
 	NSArray* tatumsData;
-	NSArray* fadeInData;
-	NSArray* fadeOutData;
+	ENEndOfFadeIn* fadeInData;
+	ENStartOfFadeOut* fadeOutData;
 	NSArray* segmentsData;
 	NSString* attribute;
 	QTMovie* sound;
@@ -23,6 +24,9 @@
 	CGLayerRef fadeOut;
 	CGLayerRef segments;
 }
+
+@property (nonatomic,retain) ENEndOfFadeIn*		fadeInData;
+@property (nonatomic,retain) ENStartOfFadeOut*	fadeOutData;
 
 -(void) setXmlData:(NSArray*)input forType:(NSString*)type;
 -(void) drawGraphics;

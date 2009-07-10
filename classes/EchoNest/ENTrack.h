@@ -6,54 +6,197 @@
 //  Copyright 2009 melka. All rights reserved.
 //
 
-#import <Cocoa/Cocoa.h>
+#import <Foundation/Foundation.h>
+
+@interface ENBar : NSObject {	
+	float confidence;
+	float time;
+}
+@property float confidence;
+@property float time;
+@end
+
+@interface ENBeat : ENBar {
+}
+@end
+
+@interface ENDuration : NSObject {
+	float time;
+}
+@property float time;
+@end
+
+@interface ENEndOfFadeIn : ENDuration {
+}
+@end
+
+@interface ENStartOfFadeOut : ENDuration {
+}
+@end
+
+@interface ENKey : NSObject {
+	float confidence;
+	int key;
+}
+@property float confidence;
+@property int key;
+@end
+
+@interface ENLoudness : NSObject {
+	float loudness;
+}
+@property float loudness;
+@end
+
+@interface ENSegmentLoudness : ENLoudness {
+	float startTime;
+	NSString* type;
+}
+@property float startTime;
+@property (nonatomic,retain) NSString* type;
+@end
+
+@interface ENMetadata : NSObject {
+	NSString*	status;
+	NSString*	artist;
+	NSString*	album;
+	NSString*	title;
+	float			duration;
+	float			samplerate;
+	float			bitrate;
+}
+@property (nonatomic,retain) NSString* status;
+@property (nonatomic,retain) NSString* artist;
+@property (nonatomic,retain) NSString* album;
+@property (nonatomic,retain) NSString* title;
+@property float duration;
+@property float samplerate;
+@property float bitrate;
+@end
+
+@interface ENMode : NSObject {
+	float confidence;
+	int	mode;
+}
+@property float confidence;
+@property int mode;
+@end
+
+@interface ENSection : NSObject {
+	float startTime;
+	float time;
+}
+@property float startTime;
+@property float time;
+@end
+
+@interface ENSegment : ENSection {
+	NSArray*					pitches;
+	NSArray*					timbre;
+	ENSegmentLoudness*	globalLoudness;
+	ENSegmentLoudness*	maxLoudness;
+}
+@property (nonatomic,retain) ENSegmentLoudness* globalLoudness;
+@property (nonatomic,retain) ENSegmentLoudness* maxLoudness;
+@property (nonatomic,retain) NSArray*				pitches;
+@property (nonatomic,retain) NSArray*				timbre;
+@end
+
+@interface ENTatum : ENBar {
+}
+@end
+
+@interface ENTempo : NSObject {
+	float confidence;
+	float tempo;
+}
+@property float confidence;
+@property float tempo;
+@end
+
+@interface ENTimeSignature : NSObject {
+	float confidence;
+	float signature;
+}
+@property float confidence;
+@property float signature;
+@end
+
 
 @interface ENTrack : NSObject {
 	// URL LOADING
 	NSURLConnection*	trackBarsConnection;
 	NSMutableData*		trackBarsData;
-	NSXMLDocument*		trackBars;
+	NSMutableArray*	trackBars;
+	ENBar*				currentBar;
+	
 	NSURLConnection*	trackBeatsConnection;
 	NSMutableData*		trackBeatsData;
-	NSXMLDocument*		trackBeats;
+	NSMutableArray*	trackBeats;
+	ENBeat*				currentBeat;
+	
 	NSURLConnection*	trackDurationConnection;
 	NSMutableData*		trackDurationData;
-	NSXMLDocument*		trackDuration;
+	ENDuration*			trackDuration;
+	
 	NSURLConnection*	trackEndOfFadeInConnection;
 	NSMutableData*		trackEndOfFadeInData;
-	NSXMLDocument*		trackEndOfFadeIn;
+	ENEndOfFadeIn*		trackEndOfFadeIn;
+	
 	NSURLConnection*	trackKeyConnection;
 	NSMutableData*		trackKeyData;
-	NSXMLDocument*		trackKey;
+	ENKey*				trackKey;
+	
 	NSURLConnection*	trackLoudnessConnection;
 	NSMutableData*		trackLoudnessData;
-	NSXMLDocument*		trackLoudness;
+	ENLoudness*			trackLoudness;
+	
 	NSURLConnection*	trackMetadataConnection;
 	NSMutableData*		trackMetadataData;
-	NSXMLDocument*		trackMetadata;
+	ENMetadata*			trackMetadata;
+	
 	NSURLConnection*	trackModeConnection;
 	NSMutableData*		trackModeData;
-	NSXMLDocument*		trackMode;
+	ENMode*				trackMode;
+	
 	NSURLConnection*	trackSectionsConnection;
 	NSMutableData*		trackSectionsData;
-	NSXMLDocument*		trackSections;
+	NSMutableArray*	trackSections;
+	ENSection*			currentSection;
+	
 	NSURLConnection*	trackSegmentsConnection;
 	NSMutableData*		trackSegmentsData;
-	NSXMLDocument*		trackSegments;
+	NSMutableArray*	trackSegments;
+	NSMutableArray*	pitches;
+	NSMutableArray*	timbre;
+	NSString*			currentLoudnessType;
+	ENSegmentLoudness* currentSegmentMaxLoudness;
+	ENSegmentLoudness* currentSegmentLoudness;
+	ENSegment*			currentSegment;
+	
 	NSURLConnection*	trackStartOfFadeOutConnection;
 	NSMutableData*		trackStartOfFadeOutData;
-	NSXMLDocument*		trackStartOfFadeOut;
+	ENStartOfFadeOut*	trackStartOfFadeOut;
+	
 	NSURLConnection*	trackTatumsConnection;
 	NSMutableData*		trackTatumsData;
-	NSXMLDocument*		trackTatums;
+	NSMutableArray*	trackTatums;
+	ENTatum*				currentTatum;
+	
 	NSURLConnection*	trackTempoConnection;
 	NSMutableData*		trackTempoData;
-	NSXMLDocument*		trackTempo;
+	ENTempo*				trackTempo;
+	
 	NSURLConnection*	trackTimeSignatureConnection;
 	NSMutableData*		trackTimeSignatureData;
-	NSXMLDocument*		trackTimeSignature;
+	ENTimeSignature*	trackTimeSignature;
 	
 	NSMutableURLRequest* req;
+	
+	NSXMLParser*		xmlParser;
+	NSMutableString*	currentStringValue;
+	NSString*			notificationName;
+	NSDictionary*		success;
 	
 	// EchoNest URL Parameters
 	NSString* baseUrl;	// http://developer.echonest.com/api/;

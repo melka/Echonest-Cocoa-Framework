@@ -2,9 +2,18 @@
 
 @implementation MyView
 
+@synthesize fadeInData;
+@synthesize fadeOutData;
+
 - (id)initWithFrame:(NSRect)rect
 {
 	self = [super initWithFrame:rect];
+	fadeInData = [[ENEndOfFadeIn alloc] init];
+	fadeInData.time = -1;
+	
+	fadeOutData = [[ENStartOfFadeOut alloc] init];
+	fadeOutData.time = -1;
+	
 	return self;
 }
 
@@ -50,18 +59,9 @@
 		[tatumsData autorelease];
 		tatumsData = [input retain];
 	}
-	if (type == @"fadeIn") {
-		[fadeInData autorelease];
-		fadeInData = [input retain];
-	}
-	if (type == @"fadeOut") {
-		[fadeOutData autorelease];
-		fadeOutData = [input retain];
-	}
 	if (type == @"segments") {
 		[segmentsData autorelease];
 		segmentsData = [input retain];
-		NSLog(@"SEGMENTS LOADED");
 	}
 	[self drawGraphics];
 }
@@ -121,7 +121,7 @@
 	NSSize s = f.size;
 	gc = [[NSGraphicsContext currentContext] graphicsPort];	
 	CGContextDrawLayerAtPoint(gc, CGPointZero, sections);
-	//CGContextDrawLayerAtPoint(gc, CGPointZero, segments);
+	CGContextDrawLayerAtPoint(gc, CGPointZero, segments);
 	CGContextDrawLayerAtPoint(gc, CGPointZero, bars);
 	CGContextDrawLayerAtPoint(gc, CGPointMake(0, s.height/3), beats);
 	CGContextDrawLayerAtPoint(gc, CGPointMake(0, 2*s.height/3), tatums);
@@ -160,8 +160,8 @@
 			} else {
 				CGContextSetRGBFillColor(ref,.5,.5,.5,.5);
 			}		
-			float start = [[[[sectionsData objectAtIndex:i] attributeForName:@"start"] stringValue] floatValue];
-			float time = [[[[sectionsData objectAtIndex:i] attributeForName:@"duration"] stringValue] floatValue];
+			float start = [[sectionsData objectAtIndex:i] startTime];
+			float time = [[sectionsData objectAtIndex:i] time];
 			CGRect r = CGRectMake(start*scale,0,time*scale,s.height);
 			CGContextFillRect(ref,r);
 		}
@@ -175,17 +175,17 @@
 			} else {
 				CGContextSetRGBFillColor(ref,.5,.5,.5,.5);
 			}
-			float start = [[[[segmentsData objectAtIndex:i] attributeForName:@"start"] stringValue] floatValue];
-			float time = [[[[segmentsData objectAtIndex:i] attributeForName:@"duration"] stringValue] floatValue];
+			float start = [[segmentsData objectAtIndex:i] startTime];
+			float time = [[segmentsData objectAtIndex:i] time];
 			CGRect r = CGRectMake(start*scale,0,time*scale,s.height);
 			CGContextFillRect(ref,r);
 		}
 	}	
 
-	if ([fadeInData count] != 0) {
+	if ([fadeInData time] != -1) {
 		fadeIn = CGLayerCreateWithContext(gc, CGSizeMake(s.width,s.height), NULL);
 		CGContextRef ref = CGLayerGetContext(fadeIn);
-		float time = [[[fadeInData objectAtIndex:0] stringValue] floatValue];
+		float time = [fadeInData time];
 		CGContextSetLineWidth(ref, 1);
 		CGContextSetStrokeColorWithColor(ref, CGColorCreateGenericRGB(1, 1, 1, 1));
 		CGContextBeginPath(ref);
@@ -194,10 +194,10 @@
 		CGContextAddLineToPoint(ref, s.width/2, s.height/2);
 		CGContextStrokePath(ref);
 	}
-	if ([fadeOutData count] != 0) {
+	if ([fadeOutData time] != -1) {
 		fadeOut = CGLayerCreateWithContext(gc, CGSizeMake(s.width,s.height), NULL);
 		CGContextRef ref = CGLayerGetContext(fadeOut);
-		float time = [[[fadeOutData objectAtIndex:0] stringValue] floatValue];
+		float time = [fadeOutData time];
 		CGContextSetLineWidth(ref, 1);
 		CGContextSetStrokeColorWithColor(ref, CGColorCreateGenericRGB(1, 1, 1, 1));
 		CGContextBeginPath(ref);
@@ -211,8 +211,8 @@
 		bars = CGLayerCreateWithContext(gc, CGSizeMake(s.width,s.height/3), NULL);
 		CGContextRef ref = CGLayerGetContext(bars);
 		for (i = 0; i<[barsData count];i++) {
-			float confidence = [[[[barsData objectAtIndex:i] attributeForName:@"confidence"] stringValue] floatValue];
-			float time = [[[barsData objectAtIndex:i] stringValue] floatValue];
+			float confidence = [[barsData objectAtIndex:i] confidence];
+			float time = [[barsData objectAtIndex:i] time];
 			/*if (currentTime <= time && currentTime > [[[barsData objectAtIndex:i-1] stringValue] floatValue]) {
 				CGRect r = CGRectMake(dT*scale,0,(time-dT)*scale,s.height/3);
 				CGContextSetRGBFillColor(ref,confidence,confidence,confidence,.4);
@@ -257,8 +257,8 @@
 		beats = CGLayerCreateWithContext(gc, CGSizeMake(s.width,s.height/3), NULL);
 		CGContextRef ref = CGLayerGetContext(beats);
 		for (i = 0; i<[beatsData count];i++) {
-			float confidence = [[[[beatsData objectAtIndex:i] attributeForName:@"confidence"] stringValue] floatValue];
-			float time = [[[beatsData objectAtIndex:i] stringValue] floatValue];			
+			float confidence = [[beatsData objectAtIndex:i] confidence];
+			float time = [[beatsData objectAtIndex:i] time];			
 			/*if (currentTime <= time && currentTime > [[[beatsData objectAtIndex:i-1] stringValue] floatValue]) {
 				CGRect r = CGRectMake(dT*scale,0,(time-dT)*scale,(s.height/3));
 				CGContextSetRGBFillColor(ref,confidence,confidence,confidence,.4);
@@ -300,8 +300,8 @@
 		tatums = CGLayerCreateWithContext(gc, CGSizeMake(s.width,s.height/3), NULL);
 		CGContextRef ref = CGLayerGetContext(tatums);
 		for (i = 0; i<[tatumsData count];i++) {
-			float confidence = [[[[tatumsData objectAtIndex:i] attributeForName:@"confidence"] stringValue] floatValue];
-			float time = [[[tatumsData objectAtIndex:i] stringValue] floatValue];
+			float confidence = [[tatumsData objectAtIndex:i] confidence];
+			float time = [[tatumsData objectAtIndex:i] time];
 			/*if (currentTime <= time && currentTime > [[[tatumsData objectAtIndex:i-1] stringValue] floatValue]) {
 				CGRect r = CGRectMake(dT*scale,0,(time-dT)*scale,(s.height/3));
 				CGContextSetRGBFillColor(ref,confidence,confidence,confidence,.4);

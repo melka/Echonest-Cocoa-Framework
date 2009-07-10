@@ -65,7 +65,7 @@
 	sections = NO;	
 	
 #pragma mark Enter Your EchoNest API Key here
-	APIKey = [NSString stringWithString:@"yourApiKey"];
+	APIKey = [NSString stringWithString:@"LSTYWLC2LB6WKXP2Y"];
 	
 	nest = [[EchoNest alloc] initWithAPIKey:APIKey];
 	[loader startAnimation:nil];
@@ -186,8 +186,8 @@
 		// RETRIEVE THE TRACK OBJECT
 		track = [nest track];
 		// RETRIEVE INFOS FROM TRACK
-		[track getMetadata];
-		[track getSections];
+		//[track getMetadata];
+		//[track getSections];
 		if (bars) {
 			[track getBars];
 		}
@@ -216,8 +216,8 @@
 		// RETRIEVE THE TRACK OBJECT
 		track = [nest track];
 		// RETRIEVE INFOS FROM TRACK
-		[track getMetadata];
-		[track getSections];
+		//[track getMetadata];
+		//[track getSections];
 		if (bars) {
 			[track getBars];
 		}
@@ -250,35 +250,41 @@
 -(void)ENTrackDurationLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
 		[labelInfos setTextColor:[NSColor blackColor]];
-		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Duration : %@ seconds",[[[not object] objectAtIndex:0] stringValue]]];
+		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Duration : %f seconds",[[not object] time]]];
 	}
 	[loader stopAnimation:nil];
 }
 -(void)ENTrackEndOfFadeInLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		[drawingView setXmlData:[not object]  forType:@"fadeIn"];
+		[drawingView setFadeInData:[not object]];
+	}
+	[loader stopAnimation:nil];
+}
+-(void)ENTrackStartOfFadeOutLoaded:(NSNotification*)not {
+	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
+		[drawingView setFadeOutData:[not object]];
 	}
 	[loader stopAnimation:nil];
 }
 -(void)ENTrackKeyLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		float confidence = [[[[[not object] objectAtIndex:0] attributeForName:@"confidence"] stringValue] floatValue];
+		float confidence = [[not object] confidence];
 		NSColor* c = [NSColor colorWithCalibratedHue:confidence/4 saturation:.8 brightness:1 alpha:1]; 
 		[labelInfos setTextColor:c];
-		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Key : %@",[[[not object] objectAtIndex:0] stringValue]]];
+		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Key : %i",[[not object] key]]];
 	}
 	[loader stopAnimation:nil];
 }
 -(void)ENTrackLoudnessLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
 		[labelInfos setTextColor:[NSColor blackColor]];
-		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Loudness : %@dB",[[[not object] objectAtIndex:0] stringValue]]];
+		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Loudness : %fdB",[[not object] loudness]]];
 	}
 	[loader stopAnimation:nil];
 }
 -(void)ENTrackMetadataLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		NSString* m = [NSString stringWithFormat:@"%@ - %@ : %@",[[[not object] objectAtIndex:3] stringValue], [[[not object] objectAtIndex:4] stringValue], [[[not object] objectAtIndex:5] stringValue]];
+		NSString* m = [NSString stringWithFormat:@"%@ - %@ : %@ : %@",[[not object] status], [[not object] artist],[[not object] album],[[not object] title]];
 		[labelInfos setTextColor:[NSColor blackColor]];
 		[labelInfos setTitleWithMnemonic:m];
 	}
@@ -286,11 +292,11 @@
 }
 -(void)ENTrackModeLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		float confidence = [[[[[not object] objectAtIndex:0] attributeForName:@"confidence"] stringValue] floatValue];
+		float confidence = [[not object] confidence];
 		NSColor* c = [NSColor colorWithCalibratedHue:confidence/4 saturation:.8 brightness:1 alpha:1]; 
 		[labelInfos setTextColor:c];
 		NSString* mode;
-		if ([[[[not object] objectAtIndex:0] stringValue] intValue] == 1) {
+		if ([[not object] mode] == 1) {
 			mode = @"Major";
 		} else {
 			mode = @"Minor";
@@ -311,12 +317,6 @@
 	}
 	[loader stopAnimation:nil];
 }
--(void)ENTrackStartOfFadeOutLoaded:(NSNotification*)not {
-	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		[drawingView setXmlData:[not object]  forType:@"fadeOut"];
-	}
-	[loader stopAnimation:nil];
-}
 -(void)ENTrackTatumsLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
 		[drawingView setXmlData:[not object] forType:@"tatums"];
@@ -325,19 +325,19 @@
 }
 -(void)ENTrackTempoLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		float confidence = [[[[[not object] objectAtIndex:0] attributeForName:@"confidence"] stringValue] floatValue];
+		float confidence = [[not object] confidence];
 		NSColor* c = [NSColor colorWithCalibratedHue:confidence/4 saturation:.8 brightness:1 alpha:1]; 
 		[labelInfos setTextColor:c];
-		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Tempo : %@ BPM",[[[not object] objectAtIndex:0] stringValue]]];
+		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Tempo : %f BPM",[[not object] tempo]]];
 	}
 	[loader stopAnimation:nil];
 }
 -(void)ENTrackTimeSignatureLoaded:(NSNotification*)not {
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
-		float confidence = [[[[[not object] objectAtIndex:0] attributeForName:@"confidence"] stringValue] floatValue];
+		float confidence = [[not object] confidence];
 		NSColor* c = [NSColor colorWithCalibratedHue:confidence/4 saturation:.8 brightness:1 alpha:1]; 
 		[labelInfos setTextColor:c];
-		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Time Signature : %@",[[[not object] objectAtIndex:0] stringValue]]];
+		[labelInfos setTitleWithMnemonic:[NSString stringWithFormat:@"Time Signature : %f",[[not object] signature]]];
 	}
 	[loader stopAnimation:nil];
 }
