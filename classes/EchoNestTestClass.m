@@ -65,8 +65,7 @@
 	sections = NO;	
 	
 #pragma mark Enter Your EchoNest API Key here
-	APIKey = [NSString stringWithString:@"LSTYWLC2LB6WKXP2Y"];
-	
+	APIKey = [NSString stringWithString:@"yourApiKey"];	
 	nest = [[EchoNest alloc] initWithAPIKey:APIKey];
 	[loader startAnimation:nil];
 }

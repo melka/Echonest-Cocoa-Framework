@@ -95,6 +95,7 @@
 	QTTime duration = [sound duration];
 	float d = ((float)duration.timeValue/(float)duration.timeScale);
 	float scale = width/d;
+	//NSLog(@"d = : %f",d);
 	
 	// TRACKBAR DRAWING
 	QTTime t = [sound currentTime];
