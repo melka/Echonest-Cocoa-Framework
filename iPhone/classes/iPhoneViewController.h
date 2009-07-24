@@ -16,9 +16,14 @@
 	NSString* APIKey;
 	EchoNest* nest;
 	ENTrack* track;
+	NSString* mp3url;
+	NSString* localMP3;
+	NSString* trackMd5;
 	IBOutlet id loader;
 	IBOutlet id labelInfos;
 	IBOutlet id drawingView;
+	IBOutlet id infosView;
+	IBOutlet id progressBar;
 }
 
 @end

@@ -1,10 +1,25 @@
 //
 //  EchoNest.m
 //  EchoNest
-//
-//  Created by Kamel Makhloufi on 17/06/09.
-//  Copyright 2009 melka. All rights reserved.
-//
+// 
+// The Echo Nest API Objective-C library
+// http://the.echonest.com/
+// Copyright (C) 2009 melka - Kamel Makhloufi
+// http://melka.one.free.fr/blog/
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 #import "EchoNest.h"
 
@@ -109,6 +124,7 @@
 }
 -(void) initializeTrack {
 	NSLog(@"INIT TRACK");
+	NSLog(@"MD5 : %@",[self trackMD5]);
 	track = [[ENTrack alloc] initWithApiKey:[self apiKey] andTrackMD5:[self trackMD5]];
 }
 -(void) uploadFile:(NSString*)path {
@@ -122,7 +138,7 @@
 	trackUploadValidationConnection = [NSURLConnection connectionWithRequest:req delegate:self];
 }
 -(void) uploadData {
-	
+	NSLog(@"start of upload : %@", filePath);
 	trackUploadResponseData = [[NSMutableData alloc] init];
 	
 	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@upload",[self baseUrl]]];
@@ -160,7 +176,42 @@
 	NSNotification* not = [NSNotification notificationWithName:@"ENTrackUploadStarted" object:nil];
 	[[NSNotificationCenter defaultCenter] postNotification:not];
 }
-
+-(void) uploadURL:(NSString*)fileUrl {
+	trackUploadResponseData = [[NSMutableData alloc] init];
+	
+	NSURL* url = [NSURL URLWithString:[NSString stringWithFormat:@"%@upload",[self baseUrl]]];
+	
+	NSMutableURLRequest* up = [NSMutableURLRequest requestWithURL:url];
+	NSString* boundary = @"------------------------xHtMlBoUnDaRy4CoCoAFraMewOrk";
+	[up setHTTPMethod:@"POST"];
+	[up setValue:@"EchoNestCocoaFramework/Alpha1" forHTTPHeaderField:@"User-Agent"];
+	[up addValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@",boundary] forHTTPHeaderField:@"Content-Type"];
+	
+	NSMutableData *postBody = [NSMutableData data];
+	// ADDING API KEY
+	[postBody appendData:[[NSString stringWithFormat:@"\r\n\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"api_key\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:apiKey] dataUsingEncoding:NSUTF8StringEncoding]];
+	// VERSION 3
+	[postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"version\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"3"] dataUsingEncoding:NSUTF8StringEncoding]];
+	// WAIT FOR ANALYSIS TO COMPLETE
+	[postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"wait\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"Y"] dataUsingEncoding:NSUTF8StringEncoding]];
+	// URL OF THE FILE
+	[postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:@"Content-Disposition: form-data; name=\"url\"\r\n\r\n"] dataUsingEncoding:NSUTF8StringEncoding]];
+	[postBody appendData:[[NSString stringWithString:fileUrl] dataUsingEncoding:NSUTF8StringEncoding]];
+	// CLOSING THE HTTP BODY
+	[postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+	
+	[up setHTTPBody:postBody];
+	trackUploadConnection = [NSURLConnection connectionWithRequest:up delegate:self];
+	NSNotification* not = [NSNotification notificationWithName:@"ENTrackUploadStarted" object:nil];
+	[[NSNotificationCenter defaultCenter] postNotification:not];
+}
 - (void) connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response{
 	if ([connection isEqual:apiKeyValidationConnection]) {
 		NSLog(@"URLCONNECTION TYPE : VALIDATION");
@@ -186,6 +237,15 @@
 		[trackUploadResponseData appendData:data];
 	}
 }
+
+-(void)connection:(NSURLConnection*)connection didSendBodyData:(NSInteger)bytesWritten totalBytesWritten:(NSInteger)totalBytesWritten totalBytesExpectedToWrite:(NSInteger)totalBytesExpectedToWrite {
+	if ([connection isEqual:trackUploadConnection]) {
+		NSNumber* percent = [NSNumber numberWithFloat:((float)totalBytesWritten / (float)totalBytesExpectedToWrite)]; 
+		NSNotification* not = [NSNotification notificationWithName:[NSString stringWithString:@"ENTrackUploadProgress"] object:percent];
+		[[NSNotificationCenter defaultCenter] postNotification:not];
+	}
+}
+
 - (void) connectionDidFinishLoading:(NSURLConnection *)connection {
 	if ([connection isEqual:apiKeyValidationConnection]) {
 		notificationName = [NSString stringWithString:@"ENApiKeyIsValid"];
@@ -206,20 +266,23 @@
 		notificationName = [NSString stringWithString:@"ENTrackUploadFinished"];
 		[xmlParser initWithData:trackUploadResponseData];
 		[xmlParser parse];
+		NSLog(@"UPLOAD FINISHED");
+		NSLog(@"%@",[[NSString alloc] initWithData:trackUploadResponseData encoding:NSUTF8StringEncoding]);
 	}	
 }
-
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
-	currentStringValue =[[NSMutableString alloc] init];	
+	currentStringValue =[[NSMutableString alloc] init];
+	if ([notificationName isEqual:@"ENTrackUploadFinished"]) {
+		if ([elementName isEqual:@"track"]) {
+			[self setTrackMD5:[attributeDict valueForKey:@"md5"]];
+		}
+	}	
 }
-
 - (void)parser:(NSXMLParser *)parser foundCharacters:(NSString *)string {	
 	[currentStringValue appendString:string];
 }
-
 - (void)parser:(NSXMLParser *)parser didEndElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName {
 	if ([elementName isEqual:@"message"]) {
-		NSNumber* success;		
 		if ([notificationName isEqual:@"ENApiKeyIsValid"]) {
 			if ([currentStringValue isEqualToString:@"Invalid API key"]) {
 				success = [NSNumber numberWithBool:NO];				
@@ -230,7 +293,6 @@
 		if ([notificationName isEqual:@"ENUploadValidationFinished"]) {
 			if ([currentStringValue isEqual:@"Success"]) {
 				success = [NSNumber numberWithBool:YES];
-				[self initializeTrack];
 			} else {
 				success = [NSNumber numberWithBool:NO];
 				[self uploadData];
@@ -239,21 +301,18 @@
 		if ([notificationName isEqual:@"ENTrackUploadFinished"]) {
 			if ([currentStringValue isEqual:@"Success"]) {
 				success = [NSNumber numberWithBool:YES];
-				[self initializeTrack];
 			} else {
 				success = [NSNumber numberWithBool:NO];
 			}
 		}
-		NSNotification* not = [NSNotification notificationWithName:notificationName object:success];
-		[[NSNotificationCenter defaultCenter] postNotification:not];
-	}
-	
+	}	
 	[currentStringValue release];
 	currentStringValue = nil;
 }
 
 - (void)parserDidEndDocument:(NSXMLParser *)parser {
-	
+	NSNotification* not = [NSNotification notificationWithName:notificationName object:success];
+	[[NSNotificationCenter defaultCenter] postNotification:not];
 }
 
 -(ENTrack*)track{	return track; }
@@ -306,6 +365,11 @@
 	
 	return out;
 }
+
+//MD5 Calculation for the mp3 file
+//Variation on the code by Vroomtrap
+//http://www.vroomtrap.com/
+//http://discussions.apple.com/thread.jspa?threadID=1509152&tstart=96
 
 -(NSString*) md5:(NSData*)data {		
 	unsigned char result[CC_MD5_DIGEST_LENGTH];

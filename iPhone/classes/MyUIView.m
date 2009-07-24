@@ -2,11 +2,50 @@
 
 @implementation MyUIView
 
-
+@synthesize duration;
 @synthesize fadeInData;
 @synthesize fadeOutData;
 
+float contentLength;
+float percentage;
+
+#pragma mark AUDIO LOADING & PLAYBACK
+-(void)loadDistantMP3:(NSString*)url {
+	mp3data = [[NSMutableData alloc] init];
+	NSURLRequest* req = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+	[NSURLConnection connectionWithRequest:req delegate:self];
+	[progressBar setProgress:0];
+}
+
+-(void)loadLocalMP3:(NSString*)filePath {
+	player = [[AVAudioPlayer alloc] initWithContentsOfURL:[NSURL fileURLWithPath:filePath] error:nil];
+	[player setDelegate:self];
+	[progressBar setHidden:YES];
+}
+
+-(void) connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {
+	contentLength = (float)[response expectedContentLength];
+}
+-(void) connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[mp3data appendData:data];
+	percentage = ((float)[mp3data length])/contentLength*100;
+	[progressBar setProgress:(percentage/100)];
+}
+-(void) connectionDidFinishLoading:(NSURLConnection *)connection {
+	player = [[AVAudioPlayer alloc] initWithData:mp3data error:nil];
+	[player setDelegate:self];
+	[progressBar setHidden:YES];
+}
+
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {}
+- (void)audioPlayerBeginInterruption:(AVAudioPlayer *)player{}
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError *)error{}
+- (void)audioPlayerEndInterruption:(AVAudioPlayer *)player {}
+
 -(void) setXmlData:(NSArray*)input forType:(NSString*)type {
+	if ([player currentTime] == 0) {
+		[player play];
+	}
 	if (type == @"sections") {
 		[sectionsData autorelease];
 		sectionsData = [input retain];
@@ -33,8 +72,25 @@
 -(void) drawRect:(CGRect)rect {
 	if ( !animationTimer)
 		animationTimer=[ [ NSTimer scheduledTimerWithTimeInterval:(1.0/60.0) target:self selector:@selector(animationTimerFired:) userInfo:nil repeats:YES ] retain ] ;
-	
 	[self drawLayers];
+	
+	CGRect f = [self frame];
+	CGSize s = f.size;
+	float width = s.width;
+	float scale = 1;
+	if (duration) {
+		scale = width/duration;
+	}	
+	// TRACKBAR DRAWING
+	float currentTime = [player currentTime];
+	CGContextRef ref = UIGraphicsGetCurrentContext();
+	
+	CGContextSetLineWidth(ref, 1);
+	CGContextSetRGBStrokeColor(ref, 0, 0, 0, 1);
+	CGContextBeginPath(ref);
+	CGContextMoveToPoint(ref, currentTime*scale, 0);
+	CGContextAddLineToPoint(ref, currentTime*scale, s.height);
+	CGContextStrokePath(ref);
 }
 
 -(void) drawLayers {
@@ -62,8 +118,10 @@
 	CGRect f = [self frame];
 	CGSize s = f.size;
 	float width = s.width;
-	float scale = width/36.205002;
-	
+	float scale = 1;
+	if (duration) {
+		scale = width/duration;
+	}	
 	float dT = 0;
 	int i;
 	
@@ -74,7 +132,7 @@
 			if (i%2 == 0) {
 				CGContextSetRGBFillColor(ref,1,1,1,.5);
 			} else {
-				CGContextSetRGBFillColor(ref,.5,.5,.5,.5);
+				CGContextSetRGBFillColor(ref,.8,.8,.8,.5);
 			}		
 			float start = [[sectionsData objectAtIndex:i] startTime];
 			float time = [[sectionsData objectAtIndex:i] time];
@@ -152,8 +210,8 @@
 			
 			CGContextSaveGState(ref);
 			CGContextClipToRect(ref, r);
-			start = CGPointMake(r.origin.x, 0);
-			end = CGPointMake(r.origin.x, r.size.height);
+			end = CGPointMake(r.origin.x, 0);
+			start = CGPointMake(r.origin.x, r.size.height);
 			CGContextDrawLinearGradient(ref, gradient, start, end, kCGGradientDrawsBeforeStartLocation);
 			CGContextRestoreGState(ref);
 			
@@ -190,8 +248,8 @@
 			
 			CGContextSaveGState(ref);
 			CGContextClipToRect(ref, r);
-			start = CGPointMake(r.origin.x, 0);
-			end = CGPointMake(r.origin.x, r.size.height);
+			end = CGPointMake(r.origin.x, 0);
+			start = CGPointMake(r.origin.x, r.size.height);
 			CGContextDrawLinearGradient(ref, gradient, start, end, kCGGradientDrawsBeforeStartLocation);
 			CGContextRestoreGState(ref);
 			dT = time;
@@ -228,8 +286,8 @@
 			
 			CGContextSaveGState(ref);
 			CGContextClipToRect(ref, r);
-			start = CGPointMake(r.origin.x, 0);
-			end = CGPointMake(r.origin.x, r.size.height);
+			end = CGPointMake(r.origin.x, 0);
+			start = CGPointMake(r.origin.x, r.size.height);
 			CGContextDrawLinearGradient(ref, gradient, start, end, kCGGradientDrawsBeforeStartLocation);
 			CGContextRestoreGState(ref);
 			dT = time;

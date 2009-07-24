@@ -28,6 +28,7 @@
 		A5A2D2691007F44000D5C57D /* ENArtist.m in Sources */ = {isa = PBXBuildFile; fileRef = A5862E5F0FE981EC00BF413C /* ENArtist.m */; };
 		A5A2D26A1007F44000D5C57D /* ENTrack.m in Sources */ = {isa = PBXBuildFile; fileRef = A5862E630FE981EC00BF413C /* ENTrack.m */; };
 		A5A2D3321007FC4F00D5C57D /* MyUIView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5A2D3311007FC4F00D5C57D /* MyUIView.m */; };
+		A5CB0C58100B7D4D0077F3D3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5CB0C57100B7D4D0077F3D3 /* AVFoundation.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -77,10 +78,11 @@
 		A595106C0FE9848C00692D58 /* EchoNestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EchoNestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A59CEAB70FEEA82E008C17D2 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		A59FD31F0FE7CF240083CFC4 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = /System/Library/Frameworks/QuartzCore.framework; sourceTree = "<absolute>"; };
-		A5A2D1CB1007F3EF00D5C57D /* iPhoneTestApp-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.mxml; path = "iPhoneTestApp-Info.plist"; sourceTree = "<group>"; };
+		A5A2D1CB1007F3EF00D5C57D /* iPhoneTestApp-Info.plist */ = {isa = PBXFileReference; explicitFileType = text.plist; fileEncoding = 4; path = "iPhoneTestApp-Info.plist"; sourceTree = "<group>"; };
 		A5A2D3301007FC4F00D5C57D /* MyUIView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyUIView.h; sourceTree = "<group>"; };
 		A5A2D3311007FC4F00D5C57D /* MyUIView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyUIView.m; sourceTree = "<group>"; };
 		A5A7AF8D1007A14A00701AA9 /* CommonDigest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CommonDigest.h; path = /Developer/SDKs/MacOSX10.5.sdk/usr/include/CommonCrypto/CommonDigest.h; sourceTree = "<absolute>"; };
+		A5CB0C57100B7D4D0077F3D3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,6 +93,7 @@
 				A523927D1007F38F008E7F89 /* CoreGraphics.framework in Frameworks */,
 				A523927F1007F38F008E7F89 /* Foundation.framework in Frameworks */,
 				A52392811007F38F008E7F89 /* UIKit.framework in Frameworks */,
+				A5CB0C58100B7D4D0077F3D3 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +203,7 @@
 		A5A2D2661007F41900D5C57D /* iPhone Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A5CB0C57100B7D4D0077F3D3 /* AVFoundation.framework */,
 				A523927C1007F38F008E7F89 /* CoreGraphics.framework */,
 				A523927E1007F38F008E7F89 /* Foundation.framework */,
 				A52392801007F38F008E7F89 /* UIKit.framework */,

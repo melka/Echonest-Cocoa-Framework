@@ -32,7 +32,6 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
 	/*
 	 Here I used the Long Way
 	 Each action (get_tatums, get_metadata, etc...) sends a notification.
@@ -61,7 +60,9 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENArtistFound:) name:@"ENArtistSearchFinished" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackUploadValidationFinished:) name:@"ENUploadValidationFinished" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackUploadStarted:) name:@"ENTrackUploadStarted" object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackUploadProgress:) name:@"ENTrackUploadProgress" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackUploadFinished:) name:@"ENTrackUploadFinished" object:nil];
+	
 	// TRACK NOTIFICATIONS
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackBarsLoaded:) name:@"ENTrackBarsLoaded" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackBeatsLoaded:) name:@"ENTrackBeatsLoaded" object:nil];
@@ -78,11 +79,15 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackTempoLoaded:) name:@"ENTrackTempoLoaded" object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ENTrackTimeSignatureLoaded:) name:@"ENTrackTimeSignatureLoaded" object:nil];
 #pragma mark Enter Your EchoNest API Key here
-	APIKey = [NSString stringWithString:@"yourApiKey"];
-	NSString* trackMd5 = [NSString stringWithString:@"dc9f3021cd4cff17a7da2b73280eb998"]; // M.I.A. - Arular - Banana Skit
-	nest = [[EchoNest alloc] initWithAPIKey:APIKey andArtistID:nil andTrackMD5:trackMd5];
+	APIKey = [NSString stringWithString:@"yourAPIKey"];
+	nest = [[EchoNest alloc] initWithAPIKey:APIKey];
+	[drawingView setFrame:[[self view] frame]];
+	[infosView setFrame:[[self view] frame]];
+	[infosView setBackgroundColor:[UIColor clearColor]];
+	[[self view] addSubview:infosView];
+	
+	[progressBar setHidden:YES];
 }
-
 
 #pragma mark EchoNest notifications
 
@@ -92,10 +97,35 @@
 	if ([[not object] boolValue]) {
 		[labelInfos setText:@"EchoNest API Key valid"];
 		[loader startAnimating];
-		[nest initializeTrack];
-		track = [nest track];
-		[labelInfos setText:@"Track Initialized"];
-		[track getMetadata];
+		
+		// 3 methods to get an analysis
+		int method = 3;
+		switch (method) {
+			case 1 :
+				// 1 - Uploading local MP3 file
+				localMP3 = @"NAME OF THE FILE IN YOUR BUNDLE";
+				[nest uploadFile:[[NSBundle mainBundle]  pathForResource:localMP3 ofType:@"mp3"]];
+				[drawingView loadLocalMP3:[[NSBundle mainBundle] pathForResource:localMP3 ofType:@"mp3"]];
+				break;
+			case 2 :
+				// 2 - Using a file on a server
+				mp3url = @"URL OF THE FILE ON THE SERVER ex:http://www.melkaone.net/audio.mp3";
+				[nest uploadURL:mp3url];
+				[drawingView loadDistantMP3:mp3url];
+				break;
+			case 3 :
+				// 3 - Using an already existing analysis
+				// You must know the md5 hash of the file.
+				trackMd5 = [NSString stringWithString:@"dc9f3021cd4cff17a7da2b73280eb998"]; // M.I.A. - Arular - Banana Skit
+				[nest setTrackMD5:trackMd5];
+				[nest initializeTrack];
+				track = [nest track];
+				[labelInfos setText:@"Track Initialized"];
+				[track getDuration];
+				break;
+			default :
+				break;
+		}		
 	} else {
 		[labelInfos setText:@"Invalid API Key"];
 	}
@@ -113,22 +143,41 @@
 	if ([[not object] boolValue]) {		
 		// RETRIEVE THE TRACK OBJECT
 		[labelInfos setText:@"Track Initialized"];
+		[nest initializeTrack];
 		track = [nest track];
+		[track getDuration];
 	}
 }
+
 -(void)ENTrackUploadStarted:(NSNotification*)not {
+	// Beginning the upload of a local MP3 file
 	[loader startAnimating];
 	[labelInfos setTextColor:[UIColor blackColor]];
 	[labelInfos setText:@"MP3 UPLOAD STARTED"];
+	[progressBar setHidden:NO];
+	[progressBar setProgress:0];
 }
-
+-(void)ENTrackUploadProgress:(NSNotification*)not {
+	// Progress of the upload
+	// [not object] is an NSNumber (float) between 0 and 1
+	[progressBar setProgress:[[not object] floatValue]];
+	if ([[not object] floatValue] == 1) {
+		[labelInfos setText:@"Waiting for analysis"];
+	}
+}
 -(void)ENTrackUploadFinished:(NSNotification*)not {
-	if ([[not object] boolValue]) {		
+	// Called when the file has finished uploading
+	// and the analysis is complete
+	if ([[not object] boolValue]) {	
 		[labelInfos setTextColor:[UIColor blackColor]];
 		[labelInfos setText:@"MP3 UPLOAD FINISHED"];		
 		// RETRIEVE THE TRACK OBJECT
+		[nest initializeTrack];
 		track = [nest track];
+		[track getDuration];
+		[labelInfos setText:@"Track Initialized"];
 	}
+	[progressBar setHidden:YES];
 	[loader stopAnimating];
 }
 // ECHONEST TRACK NOTIFICATIONS
@@ -150,6 +199,8 @@
 	if ([[[not userInfo] valueForKey:@"success"] boolValue]) {
 		[labelInfos setTextColor:[UIColor blackColor]];
 		[labelInfos setText:[NSString stringWithFormat:@"Duration : %f seconds",[[not object] time]]];
+		[drawingView setDuration:[[not object] time]];
+		[track getMetadata];
 	}
 	[loader stopAnimating];
 }
@@ -247,18 +298,29 @@
 	[loader stopAnimating];
 }
 
-/*
 // Override to allow orientations other than the default portrait orientation.
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    //return (interfaceOrientation == UIInterfaceOrientationPortrait);
+	return YES;
 }
-*/
+
+-(void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {
+	CGRect r = [[self view] frame];
+	if((self.interfaceOrientation == UIDeviceOrientationLandscapeLeft) || (self.interfaceOrientation == UIDeviceOrientationLandscapeRight)){
+		[drawingView setFrame:CGRectMake(0, 0, r.size.height, r.size.width)];
+		//[infosView setFrame:CGRectMake(0, 0, r.size.width, r.size.height)];
+	} else if((self.interfaceOrientation == UIDeviceOrientationPortrait) || (self.interfaceOrientation == UIDeviceOrientationPortraitUpsideDown)){
+		[drawingView setFrame:CGRectMake(0, 0, r.size.width, r.size.height)];
+		//[infosView setFrame:CGRectMake(0, 0, r.size.width, r.size.height)];
+	}
+	[drawingView drawGraphics];
+}
+
 
 - (void)didReceiveMemoryWarning {
 	// Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-	
+    [super didReceiveMemoryWarning];	
 	// Release any cached data, images, etc that aren't in use.
 }
 

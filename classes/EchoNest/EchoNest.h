@@ -1,10 +1,26 @@
 //
 //  EchoNest.h
 //  EchoNest
-//
-//  Created by Kamel Makhloufi on 17/06/09.
-//  Copyright 2009 melka. All rights reserved.
-//
+// 
+// The Echo Nest API Objective-C library
+// http://the.echonest.com/
+// Copyright (C) 2009 melka - Kamel Makhloufi
+// http://melka.one.free.fr/blog/
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 #import <Foundation/Foundation.h>
 #import "ENArtist.h"
 #import "ENTrack.h"
@@ -20,8 +36,8 @@
 	ENTrack* track;
 	
 @private
-	
 	NSMutableURLRequest* req;
+	NSNumber* success;
 	
 	// GENERAL
 	NSURLConnection* apiKeyValidationConnection;
@@ -79,6 +95,7 @@
 -(void) initializeTrack;
 -(void) uploadFile:(NSString*)path;
 -(void) uploadData;
+-(void) uploadURL:(NSString*)url;
 
 -(ENArtist*)artist;
 -(ENTrack*)track;
